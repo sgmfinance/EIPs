@@ -1,85 +1,1127 @@
-# Ethereum Improvement Proposals (EIPs)
+ Simple Summary
+An interface standard for contracts that manage multiple callable bonds. A single contract includes any giving number of bond class, bond nonce, bond balance of an address. This standard provides independ functions to read, transfer any collection of bonds, as well as allow bond to be redeemed from the bond issuer if certain conditions are met.
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ethereum/EIPs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+/**
+ *Submitted for verification at Etherscan.io on 2020-08-19
+*/
 
-Ethereum Improvement Proposals (EIPs) describe standards for the Ethereum platform, including core protocol specifications, client APIs, and contract standards.
+// File: @openzeppelin/contracts/introspection/IERC165.sol
 
-**Before you initiate a pull request**, please read the [EIP-1](https://eips.ethereum.org/EIPS/eip-1) process document. Ideas should be thoroughly discussed prior to opening a pull request, such as on the [Ethereum Magicians forums](https://ethereum-magicians.org) or in a GitHub issue in this repository.
+// SPDX-License-Identifier: MIT
 
-This repository tracks the ongoing status of EIPs. It contains:
+pragma solidity ^0.6.0;
 
-- [Draft](https://eips.ethereum.org/all#draft) proposals which intend to complete the EIP review process.
-- [Last Call](https://eips.ethereum.org/all#last-call) for proposals that may become final (see also [RSS feed](https://eips.ethereum.org/last-call.xml)).
-- [Accepted](https://eips.ethereum.org/all#accepted) proposals which are awaiting implementation or deployment by Ethereum client developers.
-- [Final](https://eips.ethereum.org/all#final) and [Active](https://eips.ethereum.org/all#active) proposals that are recorded.
-- The [EIP process](./EIPS/eip-1.md#eip-work-flow) that governs the EIP repository.
+/**
+ * @dev Interface of the ERC165 standard, as defined in the
+ * https://eips.ethereum.org/EIPS/eip-165[EIP].
+ *
+ * Implementers can declare support of contract interfaces, which can then be
+ * queried by others ({ERC165Checker}).
+ *
+ * For an implementation, see {ERC165}.
+ */
+interface IERC165 {
+    /**
+     * @dev Returns true if this contract implements the interface defined by
+     * `interfaceId`. See the corresponding
+     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+     * to learn more about how these ids are created.
+     *
+     * This function call must use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+}
 
-Achieving "Final" status in this repository only represents that a proposal has been reviewed for technical accuracy. It is solely the responsibility of the reader to decide whether a proposal will be useful to them.
+// File: @openzeppelin/contracts/token/ERC1155/IERC1155.sol
 
-Browse all current and draft EIPs on [the official EIP site](https://eips.ethereum.org/).
+// SPDX-License-Identifier: MIT
 
-Once your first PR is merged, we have a bot that helps out by automatically merging PRs to draft EIPs. For this to work, it has to be able to tell that you own the draft being edited. Make sure that the 'author' line of your EIP contains either your GitHub username or your email address inside <triangular brackets>. If you use your email address, that address must be the one publicly shown on [your GitHub profile](https://github.com/settings/profile).
+pragma solidity ^0.6.2;
 
-## Project Goal
 
-The Ethereum Improvement Proposals repository exists as a place to share concrete proposals with potential users of the proposal and the Ethereum community at large.
+/**
+ * @dev Required interface of an ERC1155 compliant contract, as defined in the
+ * https://eips.ethereum.org/EIPS/eip-1155[EIP].
+ *
+ * _Available since v3.1._
+ */
+interface IERC10 is IERC165 {
+    /**
+     * @dev Emitted when `value` tokens of token type `id` are transfered from `from` to `to` by `operator`.
+     */
+     
+    event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 class, uint256 nonce, uint256 value);
 
-## Preferred Citation Format
+    /**
+     * @dev Equivalent to multiple {TransferSingle} events, where `operator`, `from` and `to` are the same for all
+     * transfers.
+     */
+    event TransferBatch(address indexed operator, address indexed from, address indexed to, uint256[] ids, uint256[] values);
 
-The canonical URL for a EIP that has achieved draft status at any point is at https://eips.ethereum.org/. For example, the canonical URL for EIP-1 is https://eips.ethereum.org/EIPS/eip-1.
+    /**
+     * @dev Emitted when `account` grants or revokes permission to `operator` to transfer their tokens, according to
+     * `approved`.
+     */
+    event ApprovalForAll(address indexed account, address indexed operator, bool approved);
 
-Please consider anything which is not published on https://eips.ethereum.org/ as a working paper.
+    /**
+     * @dev Emitted when the URI for token type `id` changes to `value`, if it is a non-programmatic URI.
+     *
+     * If an {URI} event was emitted for `id`, the standard
+     * https://eips.ethereum.org/EIPS/eip-1155#metadata-extensions[guarantees] that `value` will equal the value
+     * returned by {IERC1155MetadataURI-uri}.
+     */
+    event URI(string value, uint256 indexed id);
 
-And please consider anything published at https://eips.ethereum.org/ with a status of "draft" as an incomplete draft.
+    /**
+     * @dev Returns the amount of tokens of token type `id` owned by `account`.
+     *
+     * Requirements:
+     *
+     * - `account` cannot be the zero address.
+     */
+     function setcontractAdress(address bond_contract, address share_contract,address cash_contract) external  returns (bool);
+    function activeSupply( uint256 class, uint256 nonce) external view  returns (uint256);
+    
+     function redeemedSupply( uint256 class, uint256 nonce) external view  returns (uint256);
+    function burnedSupply( uint256 class, uint256 nonce) external view  returns (uint256);
+    function balanceOf(address account, uint256 class, uint256 nonce) external view returns (uint256);
+    
+     function getBondTimestamp(uint256 class, uint256 nonce) external view  returns (uint256);
+     function bondIsRedeemable(uint256 class, uint256 nonce) external view  returns (bool);
+    /**
+     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {balanceOf}.
+     *
+     * Requirements:
+     *
+     * - `accounts` and `ids` must have the same length.
+     */
+    // function balanceOfBatch(address[] calldata accounts, uint256[] calldata ids) external view returns (uint256[] memory);
 
-# Validation
+    // /**
+    //  * @dev Grants or revokes permission to `operator` to transfer the caller's tokens, according to `approved`,
+    //  *
+    //  * Emits an {ApprovalForAll} event.
+    //  *
+    //  * Requirements:
+    //  *
+    //  * - `operator` cannot be the caller.
+    //  */
+    // function setApprovalForAll(address operator, bool approved) external;
 
-EIPs must pass some validation tests.  The EIP repository ensures this by running tests using [html-proofer](https://rubygems.org/gems/html-proofer) and [eip_validator](https://rubygems.org/gems/eip_validator).
+    // /**
+    //  * @dev Returns true if `operator` is approved to transfer ``account``'s tokens.
+    //  *
+    //  * See {setApprovalForAll}.
+    //  */
+    // function isApprovedForAll(address account, address operator) external view returns (bool);
 
-It is possible to run the EIP validator locally:
-```sh
-gem install eip_validator
-eip_validator <INPUT_FILES>
-```
+    // /**
+    //  * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.
+    //  *
+    //  * Emits a {TransferSingle} event.
+    //  *
+    //  * Requirements:
+    //  *
+    //  * - `to` cannot be the zero address.
+    //  * - If the caller is not `from`, it must be have been approved to spend ``from``'s tokens via {setApprovalForAll}.
+    //  * - `from` must have a balance of tokens of type `id` of at least `amount`.
+    //  * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
+    //  * acceptance magic value.
+    //  */
+    // function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes calldata data) external;
 
-# Automerger
+    // /**
+    //  * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {safeTransferFrom}.
+    //  *
+    //  * Emits a {TransferBatch} event.
+    //  *
+    //  * Requirements:
+    //  *
+    //  * - `ids` and `amounts` must have the same length.
+    //  * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
+    //  * acceptance magic value.
+    //  */
+    // function safeBatchTransferFrom(address from, address to, uint256[] calldata ids, uint256[] calldata amounts, bytes calldata data) external;
+   
+    function issueBond(address _to, uint256 class, uint256 _ammount) external returns(bool);
+    function redeemBond(address _from, uint256 class, uint256 nonce, uint256 amount) external returns(bool);
+    
+}
 
-The EIP repository contains an "auto merge" feature to ease the workload for EIP editors.  If a change is made via a PR to a draft EIP, then the authors of the EIP can GitHub approve the change to have it auto-merged by the [eip-automerger](https://github.com/eip-automerger/automerger) bot.
 
-# Local development
 
-## Prerequisites
+pragma solidity ^0.6.0;
 
-1. Open Terminal.
 
-2. Check whether you have Ruby 2.1.0 or higher installed:
+/**
+ * _Available since v3.1._
+ */
+interface IERC1155Receiver is IERC165 {
 
-```sh
-$ ruby --version
-```
+    /**
+        @dev Handles the receipt of a single ERC1155 token type. This function is
+        called at the end of a `safeTransferFrom` after the balance has been updated.
+        To accept the transfer, this must return
+        `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
+        (i.e. 0xf23a6e61, or its own function selector).
+        @param operator The address which initiated the transfer (i.e. msg.sender)
+        @param from The address which previously owned the token
+        @param id The ID of the token being transferred
+        @param value The amount of tokens being transferred
+        @param data Additional data with no specified format
+        @return `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed
+    */
+    function onERC1155Received(
+        address operator,
+        address from,
+        uint256 id,
+        uint256 value,
+        bytes calldata data
+    )
+        external
+        returns(bytes4);
 
-3. If you don't have Ruby installed, install Ruby 2.1.0 or higher.
+    /**
+        @dev Handles the receipt of a multiple ERC1155 token types. This function
+        is called at the end of a `safeBatchTransferFrom` after the balances have
+        been updated. To accept the transfer(s), this must return
+        `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))`
+        (i.e. 0xbc197c81, or its own function selector).
+        @param operator The address which initiated the batch transfer (i.e. msg.sender)
+        @param from The address which previously owned the token
+        @param ids An array containing ids of each token being transferred (order and length must match values array)
+        @param values An array containing amounts of each token being transferred (order and length must match ids array)
+        @param data Additional data with no specified format
+        @return `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))` if transfer is allowed
+    */
+    function onERC1155BatchReceived(
+        address operator,
+        address from,
+        uint256[] calldata ids,
+        uint256[] calldata values,
+        bytes calldata data
+    )
+        external
+        returns(bytes4);
+}
 
-4. Install Bundler:
+// File: @openzeppelin/contracts/GSN/Context.sol
 
-```sh
-$ gem install bundler
-```
+// SPDX-License-Identifier: MIT
 
-5. Install dependencies:
+pragma solidity ^0.6.0;
 
-```sh
-$ bundle install
-```
+/*
+ * @dev Provides information about the current execution context, including the
+ * sender of the transaction and its data. While these are generally available
+ * via msg.sender and msg.data, they should not be accessed in such a direct
+ * manner, since when dealing with GSN meta-transactions the account sending and
+ * paying for execution may not be the actual sender (as far as an application
+ * is concerned).
+ *
+ * This contract is only required for intermediate, library-like contracts.
+ */
+abstract contract Context {
+    function _msgSender() internal view virtual returns (address payable) {
+        return msg.sender;
+    }
 
-## Build your local Jekyll site
+    function _msgData() internal view virtual returns (bytes memory) {
+        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
+        return msg.data;
+    }
+}
 
-1. Bundle assets and start the server:
+// File: @openzeppelin/contracts/introspection/ERC165.sol
 
-```sh
-$ bundle exec jekyll serve
-```
+// SPDX-License-Identifier: MIT
 
-2. Preview your local Jekyll site in your web browser at `http://localhost:4000`.
+pragma solidity ^0.6.0;
 
-More information on Jekyll and GitHub pages [here](https://help.github.com/en/enterprise/2.14/user/articles/setting-up-your-github-pages-site-locally-with-jekyll).
+
+/**
+ * @dev Implementation of the {IERC165} interface.
+ *
+ * Contracts may inherit from this and call {_registerInterface} to declare
+ * their support of an interface.
+ */
+contract ERC165 is IERC165 {
+    /*
+     * bytes4(keccak256('supportsInterface(bytes4)')) == 0x01ffc9a7
+     */
+    bytes4 private constant _INTERFACE_ID_ERC165 = 0x01ffc9a7;
+
+    /**
+     * @dev Mapping of interface ids to whether or not it's supported.
+     */
+    mapping(bytes4 => bool) private _supportedInterfaces;
+
+    constructor () internal {
+        // Derived contracts need only register support for their own interfaces,
+        // we register support for ERC165 itself here
+        _registerInterface(_INTERFACE_ID_ERC165);
+    }
+
+    /**
+     * @dev See {IERC165-supportsInterface}.
+     *
+     * Time complexity O(1), guaranteed to always use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) public view override returns (bool) {
+        return _supportedInterfaces[interfaceId];
+    }
+
+    /**
+     * @dev Registers the contract as an implementer of the interface defined by
+     * `interfaceId`. Support of the actual ERC165 interface is automatic and
+     * registering its interface id is not required.
+     *
+     * See {IERC165-supportsInterface}.
+     *
+     * Requirements:
+     *
+     * - `interfaceId` cannot be the ERC165 invalid interface (`0xffffffff`).
+     */
+    function _registerInterface(bytes4 interfaceId) internal virtual {
+        require(interfaceId != 0xffffffff, "ERC165: invalid interface id");
+        _supportedInterfaces[interfaceId] = true;
+    }
+}
+
+// File: @openzeppelin/contracts/math/SafeMath.sol
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.6.0;
+
+/**
+ * @dev Wrappers over Solidity's arithmetic operations with added overflow
+ * checks.
+ *
+ * Arithmetic operations in Solidity wrap on overflow. This can easily result
+ * in bugs, because programmers usually assume that an overflow raises an
+ * error, which is the standard behavior in high level programming languages.
+ * `SafeMath` restores this intuition by reverting the transaction when an
+ * operation overflows.
+ *
+ * Using this library instead of the unchecked operations eliminates an entire
+ * class of bugs, so it's recommended to use it always.
+ */
+library SafeMath {
+    /**
+     * @dev Returns the addition of two unsigned integers, reverting on
+     * overflow.
+     *
+     * Counterpart to Solidity's `+` operator.
+     *
+     * Requirements:
+     *
+     * - Addition cannot overflow.
+     */
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        uint256 c = a + b;
+        require(c >= a, "SafeMath: addition overflow");
+
+        return c;
+    }
+
+    /**
+     * @dev Returns the subtraction of two unsigned integers, reverting on
+     * overflow (when the result is negative).
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     *
+     * - Subtraction cannot overflow.
+     */
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        return sub(a, b, "SafeMath: subtraction overflow");
+    }
+
+    /**
+     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on
+     * overflow (when the result is negative).
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     *
+     * - Subtraction cannot overflow.
+     */
+    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        require(b <= a, errorMessage);
+        uint256 c = a - b;
+
+        return c;
+    }
+
+    /**
+     * @dev Returns the multiplication of two unsigned integers, reverting on
+     * overflow.
+     *
+     * Counterpart to Solidity's `*` operator.
+     *
+     * Requirements:
+     *
+     * - Multiplication cannot overflow.
+     */
+    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
+        // benefit is lost if 'b' is also tested.
+        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
+        if (a == 0) {
+            return 0;
+        }
+
+        uint256 c = a * b;
+        require(c / a == b, "SafeMath: multiplication overflow");
+
+        return c;
+    }
+
+    /**
+     * @dev Returns the integer division of two unsigned integers. Reverts on
+     * division by zero. The result is rounded towards zero.
+     *
+     * Counterpart to Solidity's `/` operator. Note: this function uses a
+     * `revert` opcode (which leaves remaining gas untouched) while Solidity
+     * uses an invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function div(uint256 a, uint256 b) internal pure returns (uint256) {
+        return div(a, b, "SafeMath: division by zero");
+    }
+
+    /**
+     * @dev Returns the integer division of two unsigned integers. Reverts with custom message on
+     * division by zero. The result is rounded towards zero.
+     *
+     * Counterpart to Solidity's `/` operator. Note: this function uses a
+     * `revert` opcode (which leaves remaining gas untouched) while Solidity
+     * uses an invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        require(b > 0, errorMessage);
+        uint256 c = a / b;
+        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
+
+        return c;
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+     * Reverts when dividing by zero.
+     *
+     * Counterpart to Solidity's `%` operator. This function uses a `revert`
+     * opcode (which leaves remaining gas untouched) while Solidity uses an
+     * invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
+        return mod(a, b, "SafeMath: modulo by zero");
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+     * Reverts with custom message when dividing by zero.
+     *
+     * Counterpart to Solidity's `%` operator. This function uses a `revert`
+     * opcode (which leaves remaining gas untouched) while Solidity uses an
+     * invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        require(b != 0, errorMessage);
+        return a % b;
+    }
+}
+
+// File: @openzeppelin/contracts/utils/Address.sol
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.6.2;
+
+/**
+ * @dev Collection of functions related to the address type
+ */
+library Address {
+    /**
+     * @dev Returns true if `account` is a contract.
+     *
+     * [IMPORTANT]
+     * ====
+     * It is unsafe to assume that an address for which this function returns
+     * false is an externally-owned account (EOA) and not a contract.
+     *
+     * Among others, `isContract` will return false for the following
+     * types of addresses:
+     *
+     *  - an externally-owned account
+     *  - a contract in construction
+     *  - an address where a contract will be created
+     *  - an address where a contract lived, but was destroyed
+     * ====
+     */
+    function isContract(address account) internal view returns (bool) {
+        // According to EIP-1052, 0x0 is the value returned for not-yet created accounts
+        // and 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470 is returned
+        // for accounts without code, i.e. `keccak256('')`
+        bytes32 codehash;
+        bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
+        // solhint-disable-next-line no-inline-assembly
+        assembly { codehash := extcodehash(account) }
+        return (codehash != accountHash && codehash != 0x0);
+    }
+
+    /**
+     * @dev Replacement for Solidity's `transfer`: sends `amount` wei to
+     * `recipient`, forwarding all available gas and reverting on errors.
+     *
+     * https://eips.ethereum.org/EIPS/eip-1884[EIP1884] increases the gas cost
+     * of certain opcodes, possibly making contracts go over the 2300 gas limit
+     * imposed by `transfer`, making them unable to receive funds via
+     * `transfer`. {sendValue} removes this limitation.
+     *
+     * https://diligence.consensys.net/posts/2019/09/stop-using-soliditys-transfer-now/[Learn more].
+     *
+     * IMPORTANT: because control is transferred to `recipient`, care must be
+     * taken to not create reentrancy vulnerabilities. Consider using
+     * {ReentrancyGuard} or the
+     * https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].
+     */
+    function sendValue(address payable recipient, uint256 amount) internal {
+        require(address(this).balance >= amount, "Address: insufficient balance");
+
+        // solhint-disable-next-line avoid-low-level-calls, avoid-call-value
+        (bool success, ) = recipient.call{ value: amount }("");
+        require(success, "Address: unable to send value, recipient may have reverted");
+    }
+
+    /**
+     * @dev Performs a Solidity function call using a low level `call`. A
+     * plain`call` is an unsafe replacement for a function call: use this
+     * function instead.
+     *
+     * If `target` reverts with a revert reason, it is bubbled up by this
+     * function (like regular Solidity function calls).
+     *
+     * Returns the raw returned data. To convert to the expected return value,
+     * use https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`].
+     *
+     * Requirements:
+     *
+     * - `target` must be a contract.
+     * - calling `target` with `data` must not revert.
+     *
+     * _Available since v3.1._
+     */
+    function functionCall(address target, bytes memory data) internal returns (bytes memory) {
+      return functionCall(target, data, "Address: low-level call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`], but with
+     * `errorMessage` as a fallback revert reason when `target` reverts.
+     *
+     * _Available since v3.1._
+     */
+    function functionCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
+        return _functionCallWithValue(target, data, 0, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but also transferring `value` wei to `target`.
+     *
+     * Requirements:
+     *
+     * - the calling contract must have an ETH balance of at least `value`.
+     * - the called Solidity function must be `payable`.
+     *
+     * _Available since v3.1._
+     */
+    function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCallWithValue-address-bytes-uint256-}[`functionCallWithValue`], but
+     * with `errorMessage` as a fallback revert reason when `target` reverts.
+     *
+     * _Available since v3.1._
+     */
+    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {
+        require(address(this).balance >= value, "Address: insufficient balance for call");
+        return _functionCallWithValue(target, data, value, errorMessage);
+    }
+
+    function _functionCallWithValue(address target, bytes memory data, uint256 weiValue, string memory errorMessage) private returns (bytes memory) {
+        require(isContract(target), "Address: call to non-contract");
+
+        // solhint-disable-next-line avoid-low-level-calls
+        (bool success, bytes memory returndata) = target.call{ value: weiValue }(data);
+        if (success) {
+            return returndata;
+        } else {
+            // Look for revert reason and bubble it up if present
+            if (returndata.length > 0) {
+                // The easiest way to bubble the revert reason is using memory via assembly
+
+                // solhint-disable-next-line no-inline-assembly
+                assembly {
+                    let returndata_size := mload(returndata)
+                    revert(add(32, returndata), returndata_size)
+                }
+            } else {
+                revert(errorMessage);
+            }
+        }
+    }
+}
+
+// File: @openzeppelin/contracts/token/ERC1155/ERC1155.sol
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.6.0;
+contract ERC10 is Context, ERC165, IERC10{
+    using SafeMath for uint256;
+    using Address for address;
+
+    // Mapping from token ID to account balances  4d arry of ##address, bond_class,  bond_nonce, bond balances, 
+    mapping (address  => mapping( uint256 =>mapping(uint256=> uint256))) private _balances;
+    
+    
+    // Mapping for total active supply of the bond   3d arry of ##bond_class, bond_nonce, bond supply 
+    mapping (uint256 =>  mapping(uint256 => uint256)) private _activeSupply;
+    
+      // Mapping for total burned supply of the bond
+    mapping (uint256 =>  mapping(uint256 => uint256)) private _burnedSupply;
+    
+      // Mapping for total redeemed supply of the bond
+    mapping (uint256 =>  mapping(uint256 => uint256)) private _redeemedSupply;
+
+
+    // Mapping from account to operator approvals 4d arry of ##address, bond_class,  bond_nonce, bond balances, 
+    mapping (address  => mapping( uint256 =>mapping(uint256=> uint256))) private _operatorApprovals;
+        
+    // Used as the URI for all token types by relying on ID substition, e.g. https://token-cdn-domain/{id}.json
+    string private _uri;
+
+    /*
+     *     bytes4(keccak256('balanceOf(address,uint256)')) == 0x00fdd58e
+     *     bytes4(keccak256('balanceOfBatch(address[],uint256[])')) == 0x4e1273f4
+     *     bytes4(keccak256('setApprovalForAll(address,bool)')) == 0xa22cb465
+     *     bytes4(keccak256('isApprovedForAll(address,address)')) == 0xe985e9c5
+     *     bytes4(keccak256('safeTransferFrom(address,address,uint256,uint256,bytes)')) == 0xf242432a
+     *     bytes4(keccak256('safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)')) == 0x2eb2c2d6
+     *
+     *     => 0x00fdd58e ^ 0x4e1273f4 ^ 0xa22cb465 ^
+     *        0xe985e9c5 ^ 0xf242432a ^ 0x2eb2c2d6 == 0xd9b67a26
+     */
+    bytes4 private constant _INTERFACE_ID_ERC1155 = 0xd9b67a26;
+
+    /*
+     *     bytes4(keccak256('uri(uint256)')) == 0x0e89341c
+     */
+    bytes4 private constant _INTERFACE_ID_ERC1155_METADATA_URI = 0x0e89341c;
+    
+    uint256 public last_bond_created;
+    uint256 public bond_nonce;
+    
+    // 3d arry ## bond_class, bond_nonce
+    mapping (uint256 => mapping (uint256 =>uint256 ) ) private _bondTimestamp;
+
+    constructor (string memory uri) public {
+        _setURI(uri);
+    
+        //   address public GouvernanceContract;
+        //   address public ExchangeContract;
+        //   address public MigrationContract;
+        // register the supported interfaces to conform to ERC1155 via ERC165
+        _registerInterface(_INTERFACE_ID_ERC1155);
+
+        // register the supported interfaces to conform to ERC1155MetadataURI via ERC165
+        _registerInterface(_INTERFACE_ID_ERC1155_METADATA_URI);
+    }
+      address public constant USDC = address(0xEcC3803DC9650f28c3f75940AA96B7F974e2FC58);
+      address public constant Dai = address(0x1Cd22c2b41d9cc7918AFCf46ce4742f06984818D);
+        address public BondContract;
+        address public ShareContract=0x2056962D0B1B6f575CBf6c701c927EF8A89b8E44;
+        address public CashContract=0xA80D560880270fD804079056AC8Ae33362312716;
+        
+        address public constant uniswapFactory = address(0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f);
+       
+         //address public USDCB_USDC_UniswapPairContract = IUniswapV2Factory(uniswapFactory).getPair(USDC, address(this));
+          //address pair=IUniswapV2Factory(uniswapFactory).getPair(USDC, address(this));
+    //address public constant USDCB_USDC_SushiwapPairContract = address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
+    
+       function setcontractAdress(address bond_contract, address share_contract,address cash_contract) public override returns (bool) {
+        BondContract=bond_contract;
+        ShareContract=share_contract;
+        CashContract=cash_contract;
+        return true;
+    }
+     
+     function activeSupply(  uint256 class, uint256 nonce) public override view  returns (uint256) {
+        
+        return _activeSupply[class][nonce];
+    }
+    
+     function burnedSupply( uint256 class, uint256 nonce) public override view  returns (uint256) {
+        
+        return _burnedSupply[class][nonce];
+    }
+    
+      function redeemedSupply(  uint256 class, uint256 nonce) public override view  returns (uint256) {
+        
+        return _redeemedSupply[class][nonce];
+    }
+
+    function balanceOf( address account,  uint256 class,  uint256 nonce ) public view override returns (uint256) {
+        require(account != address(0), "ERC1155: balance query for the zero address");
+        return _balances[account][class][nonce];
+    }
+     function getBondTimestamp(uint256 class, uint256 nonce) public view override returns (uint256) {
+            
+            return _bondTimestamp[class][nonce];
+     }     
+     function bondIsRedeemable(uint256 class, uint256 nonce) public view override returns (bool) {
+         
+         if(nonce<bond_nonce){
+                   uint256 total_liquidity;
+                   uint256 needed_liquidity;
+                   //uint256 available_liquidity;
+            
+                    for (uint i=0; i<=bond_nonce; i++) {
+                        total_liquidity += _activeSupply[class][i]+_redeemedSupply[class][i];
+                    }
+                    
+                    for (uint i=0; i<=nonce; i++) {
+                        needed_liquidity += (_activeSupply[class][i]+_redeemedSupply[class][i])*2;
+                    }
+                    
+                    
+                    
+                  
+                    if(total_liquidity>=needed_liquidity){
+                       
+                        return(true);
+                        
+                    }
+                    
+                    else{
+                        return(false);
+                    }
+                 }
+                 
+            else{
+                    return(false);
+                }
+        
+             
+         }
+     
+  
+        
+  
+
+
+ 
+
+
+    /**
+     * @dev See {IERC1155-balanceOfBatch}.
+     *
+     * Requirements:
+     *
+     * - `accounts` and `ids` must have the same length.
+     */
+    // function balanceOfBatch(
+    //     address[] memory accounts,
+    //     uint256[] memory ids
+    // )
+    //     public
+    //     view
+    //     override
+    //     returns (uint256[] memory)
+    // {
+    //     require(accounts.length == ids.length, "ERC1155: accounts and ids length mismatch");
+
+    //     uint256[] memory batchBalances = new uint256[](accounts.length);
+
+    //     for (uint256 i = 0; i < accounts.length; ++i) {
+    //         require(accounts[i] != address(0), "ERC1155: batch balance query for the zero address");
+    //         batchBalances[i] = _balances[ids[i]][accounts[i]];
+    //     }
+
+    //     return batchBalances;
+    // }
+
+    // /**
+    //  * @dev See {IERC1155-setApprovalForAll}.
+    //  */
+    // function setApprovalForAll(address operator, bool approved) public virtual override {
+    //     require(_msgSender() != operator, "ERC1155: setting approval status for self");
+
+    //     _operatorApprovals[_msgSender()][operator] = approved;
+    //     emit ApprovalForAll(_msgSender(), operator, approved);
+    // }
+
+    // /**
+    //  * @dev See {IERC1155-isApprovedForAll}.
+    //  */
+    // function isApprovedForAll(address account, address operator) public view override returns (bool) {
+    //     return _operatorApprovals[account][operator];
+    // }
+
+    // /**
+    //  * @dev See {IERC1155-safeTransferFrom}.
+    //  */
+    // function safeTransferFrom(
+    //     address from,
+    //     address to,
+    //     uint256 id,
+    //     uint256 amount,
+    //     bytes memory data
+    // )
+    //     public
+    //     virtual
+    //     override
+    // {
+    //     require(to != address(0), "ERC1155: transfer to the zero address");
+    //     require(
+    //         from == _msgSender() || isApprovedForAll(from, _msgSender()),
+    //         "ERC1155: caller is not owner nor approved"
+    //     );
+
+    //     address operator = _msgSender();
+
+    //     _beforeTokenTransfer(operator, from, to, _asSingletonArray(id), _asSingletonArray(amount), data);
+
+    //     _balances[id][from] = _balances[id][from].sub(amount, "ERC1155: insufficient balance for transfer");
+    //     _balances[id][to] = _balances[id][to].add(amount);
+
+    //     emit TransferSingle(operator, from, to, id, amount);
+
+    //     _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
+    // }
+
+    // /**
+    //  * @dev See {IERC1155-safeBatchTransferFrom}.
+    //  */
+    // function safeBatchTransferFrom(
+    //     address from,
+    //     address to,
+    //     uint256[] memory ids,
+    //     uint256[] memory amounts,
+    //     bytes memory data
+    // )
+    //     public
+    //     virtual
+    //     override
+    // {
+    //     require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
+    //     require(to != address(0), "ERC1155: transfer to the zero address");
+    //     require(
+    //         from == _msgSender() || isApprovedForAll(from, _msgSender()),
+    //         "ERC1155: transfer caller is not owner nor approved"
+    //     );
+
+    //     address operator = _msgSender();
+
+    //     _beforeTokenTransfer(operator, from, to, ids, amounts, data);
+
+    //     for (uint256 i = 0; i < ids.length; ++i) {
+    //         uint256 id = ids[i];
+    //         uint256 amount = amounts[i];
+
+    //         _balances[id][from] = _balances[id][from].sub(
+    //             amount,
+    //             "ERC1155: insufficient balance for transfer"
+    //         );
+    //         _balances[id][to] = _balances[id][to].add(amount);
+    //     }
+
+    //     emit TransferBatch(operator, from, to, ids, amounts);
+
+    //     _doSafeBatchTransferAcceptanceCheck(operator, from, to, ids, amounts, data);
+    // }
+
+    /**
+     * @dev Sets a new URI for all token types, by relying on the token type ID
+     * substituion mechanism
+     * https://eips.ethereum.org/EIPS/eip-1155#metadata[defined in the EIP].
+     *
+     * By this mechanism, any occurence of the `\{id\}` substring in either the
+     * URI or any of the amounts in the JSON file at said URI will be replaced by
+     * clients with the token type ID.
+     *
+     * For example, the `https://token-cdn-domain/\{id\}.json` URI would be
+     * interpreted by clients as
+     * `https://token-cdn-domain/000000000000000000000000000000000000000000000000000000000004cce0.json`
+     * for token type ID 0x4cce0.
+     *
+     * See {uri}.
+     *
+     * Because these URIs cannot be meaningfully represented by the {URI} event,
+     * this function emits no events.
+     */
+    function _setURI(string memory newuri) internal virtual {
+        _uri = newuri;
+    }
+
+    /**
+     * @dev Creates `amount` tokens of token type `id`, and assigns them to `account`.
+     *
+     * Emits a {TransferSingle} event.
+     *
+     * Requirements:
+     *
+     * - `account` cannot be the zero address.
+     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
+     * acceptance magic value.
+    //  */
+    // function _mint(address account, uint256 id, uint256 amount, bytes memory data) internal virtual {
+    //     require(account != address(0), "ERC1155: mint to the zero address");
+
+    //     address operator = _msgSender();
+
+    //     _beforeTokenTransfer(operator, address(0), account, _asSingletonArray(id), _asSingletonArray(amount), data);
+
+    //     _balances[id][account] = _balances[id][account].add(amount);
+    //     emit TransferSingle(operator, address(0), account, id, amount);
+
+    //     _doSafeTransferAcceptanceCheck(operator, address(0), account, id, amount, data);
+    // }
+
+    /**
+     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {_mint}.
+     *
+     * Requirements:
+     *
+     * - `ids` and `amounts` must have the same length.
+     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
+     * acceptance magic value.
+     */
+    // function _mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data) internal virtual {
+    //     require(to != address(0), "ERC1155: mint to the zero address");
+    //     require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
+
+    //     address operator = _msgSender();
+
+    //     _beforeTokenTransfer(operator, address(0), to, ids, amounts, data);
+
+    //     for (uint i = 0; i < ids.length; i++) {
+    //         _balances[ids[i]][to] = amounts[i].add(_balances[ids[i]][to]);
+    //     }
+
+    //     emit TransferBatch(operator, address(0), to, ids, amounts);
+
+    //     _doSafeBatchTransferAcceptanceCheck(operator, address(0), to, ids, amounts, data);
+    // }
+
+    /**
+     * @dev Destroys `amount` tokens of token type `id` from `account`
+     *
+     * Requirements:
+     *
+     * - `account` cannot be the zero address.
+     * - `account` must have at least `amount` tokens of token type `id`.
+     */
+    // function _burn(address account, uint256 id, uint256 amount) internal virtual {
+    //     require(account != address(0), "ERC1155: burn from the zero address");
+
+    //     address operator = _msgSender();
+
+    //     _beforeTokenTransfer(operator, account, address(0), _asSingletonArray(id), _asSingletonArray(amount), "");
+
+    //     _balances[id][account] = _balances[id][account].sub(
+    //         amount,
+    //         "ERC1155: burn amount exceeds balance"
+    //     );
+
+    //     emit TransferSingle(operator, account, address(0), id, amount);
+    // }
+
+    // /**
+    //  * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {_burn}.
+    //  *
+    //  * Requirements:
+    //  *
+    //  * - `ids` and `amounts` must have the same length.
+    //  */
+    // function _burnBatch(address account, uint256[] memory ids, uint256[] memory amounts) internal virtual {
+    //     require(account != address(0), "ERC1155: burn from the zero address");
+    //     require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
+
+    //     address operator = _msgSender();
+
+    //     _beforeTokenTransfer(operator, account, address(0), ids, amounts, "");
+
+    //     for (uint i = 0; i < ids.length; i++) {
+    //         _balances[ids[i]][account] = _balances[ids[i]][account].sub(
+    //             amounts[i],
+    //             "ERC1155: burn amount exceeds balance"
+    //         );
+    //     }
+
+    //     emit TransferBatch(operator, account, address(0), ids, amounts);
+    // }
+
+    // /**
+    //  * @dev Hook that is called before any token transfer. This includes minting
+    //  * and burning, as well as batched variants.
+    //  *
+    //  * The same hook is called on both single and batched variants. For single
+    //  * transfers, the length of the `id` and `amount` arrays will be 1.
+    //  *
+    //  * Calling conditions (for each `id` and `amount` pair):
+    //  *
+    //  * - When `from` and `to` are both non-zero, `amount` of ``from``'s tokens
+    //  * of token type `id` will be  transferred to `to`.
+    //  * - When `from` is zero, `amount` tokens of token type `id` will be minted
+    //  * for `to`.
+    //  * - when `to` is zero, `amount` of ``from``'s tokens of token type `id`
+    //  * will be burned.
+    //  * - `from` and `to` are never both zero.
+    //  * - `ids` and `amounts` have the same, non-zero length.
+    //  *
+    //  * To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks].
+    //  */
+    // function _beforeTokenTransfer(
+    //     address operator,
+    //     address from,
+    //     address to,
+    //     uint256[] memory ids,
+    //     uint256[] memory amounts,
+    //     bytes memory data
+    // )
+    //     internal virtual
+    // { }
+
+    // function _doSafeTransferAcceptanceCheck(
+    //     address operator,
+    //     address from,
+    //     address to,
+    //     uint256 id,
+    //     uint256 amount,
+    //     bytes memory data
+    // )
+    //     private
+    // {
+    //     if (to.isContract()) {
+    //         try IERC1155Receiver(to).onERC1155Received(operator, from, id, amount, data) returns (bytes4 response) {
+    //             if (response != IERC1155Receiver(to).onERC1155Received.selector) {
+    //                 revert("ERC1155: ERC1155Receiver rejected tokens");
+    //             }
+    //         } catch Error(string memory reason) {
+    //             revert(reason);
+    //         } catch {
+    //             revert("ERC1155: transfer to non ERC1155Receiver implementer");
+    //         }
+    //     }
+    // }
+
+    // function _doSafeBatchTransferAcceptanceCheck(
+    //     address operator,
+    //     address from,
+    //     address to,
+    //     uint256[] memory ids,
+    //     uint256[] memory amounts,
+    //     bytes memory data
+    // )
+    //     private
+    // {
+    //     if (to.isContract()) {
+    //         try IERC1155Receiver(to).onERC1155BatchReceived(operator, from, ids, amounts, data) returns (bytes4 response) {
+    //             if (response != IERC1155Receiver(to).onERC1155BatchReceived.selector) {
+    //                 revert("ERC1155: ERC1155Receiver rejected tokens");
+    //             }
+    //         } catch Error(string memory reason) {
+    //             revert(reason);
+    //         } catch {
+    //             revert("ERC1155: transfer to non ERC1155Receiver implementer");
+    //         }
+    //     }
+    // }
+
+    // function _asSingletonArray(uint256 element) private pure returns (uint256[] memory) {
+    //     uint256[] memory array = new uint256[](1);
+    //     array[0] = element;
+
+    //     return array;
+    // }
+     
+     function _createBond(address _to, uint256 class,uint256 amount) private  returns(uint256) {
+        
+        require(block.timestamp-block.timestamp %  600> _bondTimestamp[class][bond_nonce], "ERC10: Bond already created"); 
+        bond_nonce+=1;
+        _bondTimestamp[class][bond_nonce]=block.timestamp-block.timestamp %  600;
+        _balances[_to][class][bond_nonce]= amount;
+        _activeSupply[class][bond_nonce]+=amount;
+        
+        
+        
+        emit TransferSingle(msg.sender, address(0),_to, class, bond_nonce,amount);
+
+       
+    }
+    
+     function issueBond(address _to, uint256 class,uint256 amount) external override returns(bool) {
+    if (block.timestamp-block.timestamp %  600> _bondTimestamp[class][bond_nonce]) {
+          _createBond(_to,class,amount);
+          return(true);
+        }
+        else{
+        require(_to != address(0), "ERC10: send bond to the zero address");
+        
+        
+        _balances[_to][class][bond_nonce] += amount;
+        _activeSupply[class][bond_nonce]+=amount;
+     
+        
+        emit TransferSingle(msg.sender, address(0),_to, class, bond_nonce,amount);
+        return(true);
+
+        }
+    }
+    
+     function redeemBond(address _from, uint256 class, uint256 nonce, uint256 amount) external override returns(bool) {
+        require(_balances[_from][class][nonce] >= amount, "ERC10: not enough bond for redemption");
+        require(bondIsRedeemable(class,nonce)==true, "ERC10: can't redeem bond before it's redemption day");
+        
+        // require(    for (uint i=0; i<studentList.length; i++) {
+        //     emit LogStudentGrade(studentList[i], studentStructs[studentList[i]].grade);
+        // }>=IERC10(BondContract).activeSupply(bond_id) , "ERC10: can't redeem bond before it's redemption day");
+        
+        _balances[_from][class][nonce] -= amount;
+        _activeSupply[class][nonce]-=amount;
+        _redeemedSupply[class][nonce]+=amount;
+        emit TransferSingle(msg.sender, _from, address(this), class, nonce,amount);
+        return(true);
+
+       
+    }
+    // Batch mint tokens. Assign directly to _to[].
+}
+
+
+// File: contracts/GameItems.sol
+
