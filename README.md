@@ -1,5 +1,28 @@
- Simple Summary
+Simple Summary
 An interface standard for contracts that manage multiple callable bonds. A single contract includes any giving number of bond class, bond nonce, bond balance of an address. This standard provides independ functions to read, transfer any collection of bonds, as well as allow bond to be redeemed from the bond issuer if certain conditions are met.
+
+
+
+
+Abstract 
+This API standard allows for the creation of any number of bonds type in a single contract. Existing token standards like ERC-20 require deployment of separate factory and token contracts per token type. The need of issuing bonds with multiple redemption data can't be acchived with existing toekn stendards. ERC-569  Multiple Callable Bonds Standard allows for each bond class ID to represent a new configurable token type, and for each bond nonce to represent a issuing date or redemption date. Every single nonce of a bond class may have its own metadata, supply and other redemption conditions.
+
+Motivation
+This standard interface allows any tokens on Ethereum to create its own bond. And thoses bonds with a same interface standard can be exchanged in a secondary market.  And it allows any 3nd party wallet aplication or exchanges to read the balance and the redemption conditions of thoses tokens. ERC-659 bonds can also be packed in to seperated packages. Thoese pakages can in their turn be divided and exchanged in a secondary market.
+
+
+be re-used by other applications: from wallets to decentralized exchanges.
+
+
+This standard outlines a smart contract interface that can represent any number of fungible and non-fungible token types. Existing standards such as ERC-20 require deployment of separate contracts per token type. The ERC-721 standard’s token ID is a single non-fungible index and the group of these non-fungibles is deployed as a single contract with settings for the entire collection. In contrast, the ERC-1155 Multi Token Standard allows for each token ID to represent a new configurable token type, which may have its own metadata, supply and other attributes.
+
+The _id argument contained in each function’s argument set indicates a specific token or token type in a transaction.
+
+
+
+
+The _id argument contained in each function’s argument set indicates a specific token or token type in a transaction.
+
 
 /**
  *Submitted for verification at Etherscan.io on 2020-08-19
